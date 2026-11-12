@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessments | Student Portal</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .assessment-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .assessment-card {
+            padding: 22px;
+            border: 1px solid #dbe3ef;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        }
+
+        .assessment-card h2 {
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .assessment-card p {
+            margin: 8px 0;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .assessment-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 18px;
+            margin: 14px 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .assessment-action {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .assessment-action:hover {
+            background: #1d4ed8;
+        }
+
+        .assessment-message {
+            margin-top: 20px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>Student Portal</h2>
+        <a class="dashboard-btn" href="/dashboard.html">Dashboard</a>
+    </nav>
+
+    <main class="container">
+        <section class="heading">
+            <h1 id="pageTitle">Assessments</h1>
+            <p>Review your course quizzes, practical tasks, and projects.</p>
+            <p><a id="backLink" href="/assignments.html">Go to Assignments</a></p>
+        </section>
+
+        <p id="assessmentMessage" class="assessment-message" role="status" aria-live="polite">
+            Loading assessments…
+        </p>
+        <section id="assessmentList" class="assessment-list" aria-label="Available assessments"></section>
+        <section id="assessmentWorkspace" class="assessment-card" aria-live="polite" hidden></section>
+    </main>
+
+    <script>
+        const assessmentMessage = document.getElementById("assessmentMessage");
+        const assessmentList = document.getElementById("assessmentList");
+        const assessmentWorkspace = document.getElementById("assessmentWorkspace");
+        const assessmentRoute = {
+            courseSlug: {{ course_slug|default(none)|tojson }},
+            assessmentSlug: {{ assessment_slug|default(none)|tojson }}
+        };
+        let currentAssessment = null;
+        let currentAttemptId = null;
+
+        function addText(parent, tagName, text, className) {
+            const element = document.createElement(tagName);
+            element.textContent = text;
+            if (className) element.className = className;
+            parent.append(element);
+            return element;
+        }
+
+        function renderAssessment(assessment) {
+            const card = document.createElement("article");
+            card.className = "assessment-card";
+            addText(card, "h2", assessment.title);
+            addText(card, "p", assessment.description);
+
+            const metadata = document.createElement("div");
+            metadata.className = "assessment-meta";
+            addText(metadata, "span", `Course: ${assessment.course_title}`);
+            addText(metadata, "span", `Related lesson: ${assessment.lesson_title}`);
+            addText(metadata, "span", `Type: ${assessment.assessment_type}`);
+            addText(metadata, "span", `Maximum marks: ${assessment.maximum_marks}`);
+            addText(metadata, "span", `Passing marks: ${assessment.passing_marks}`);
+            addText(metadata, "span", `Attempts: ${assessment.attempts_used}/${assessment.attempt_limit}`);
+            card.append(metadata);
+
+            const action = document.createElement("a");
+            action.className = "assessment-action";
+            action.href = assessment.url;
+            action.textContent = assessment.attempts_used >= assessment.attempt_limit
+                ? "Review assessment"
+                : "Open assessment";
+            card.append(action);
+            assessmentList.append(card);
+        }
+
+        async function loadAssessments() {
+            try {
+                const response = await fetch("/api/assessments", {
+                    headers: { "Accept": "application/json" }
+                });
+                if (!response.ok) throw new Error("Assessment list request failed.");
+
+                const data = await response.json();
+                assessmentList.replaceChildren();
+                if (!Array.isArray(data.assessments) || data.assessments.length === 0) {
+                    assessmentMessage.textContent = "There are no assessments available right now.";
+                    return;
+                }
+
+                data.assessments.forEach(renderAssessment);
+                assessmentMessage.textContent = `${data.assessments.length} assessment(s) available.`;
+            } catch {
+                assessmentMessage.textContent =
+                    "Assessments could not be loaded. Refresh the page or contact support.";
+            }
+        }
+
+        async function assessmentRequest(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    "Accept": "application/json",
+                    ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+                    ...options.headers
+                }
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Assessment request failed.");
+            return result;
+        }
+
+        function assessmentApi(path = "") {
+            return `/api/assessments/${encodeURIComponent(assessmentRoute.courseSlug)}/`
+                + `${encodeURIComponent(assessmentRoute.assessmentSlug)}${path}`;
+        }
+
+        function renderAssessmentDetails(assessment) {
+            currentAssessment = assessment;
+            document.getElementById("pageTitle").textContent = assessment.title;
+            document.getElementById("backLink").href = "/assessments.html";
+            document.getElementById("backLink").textContent = "Back to Assessments";
+            assessmentList.hidden = true;
+            assessmentWorkspace.hidden = false;
+            assessmentMessage.textContent = "";
+            assessmentWorkspace.replaceChildren();
+
+            addText(assessmentWorkspace, "p", assessment.description);
+            addText(assessmentWorkspace, "p",
+                `Course: ${assessment.course_title} · Lesson: ${assessment.lesson_title}`);
+            addText(assessmentWorkspace, "p",
+                `Maximum marks: ${assessment.maximum_marks} · Passing marks: ${assessment.passing_marks}`);
+            addText(assessmentWorkspace, "p",
+                `Attempts remaining: ${assessment.attempts_remaining}`);
+            if (assessment.deadline) addText(assessmentWorkspace, "p", `Deadline: ${assessment.deadline}`);
+            if (assessment.time_limit_minutes) {
+                addText(assessmentWorkspace, "p", `Time limit: ${assessment.time_limit_minutes} minutes`);
+            }
+
+            if (assessment.objectives.length) {
+                addText(assessmentWorkspace, "h2", "Learning objectives");
+                const objectives = document.createElement("ul");
+                assessment.objectives.forEach((objective) => addText(objectives, "li", objective));
+                assessmentWorkspace.append(objectives);
+            }
+            addText(assessmentWorkspace, "h2", "Instructions");
+            addText(assessmentWorkspace, "p", assessment.instructions);
+
+            const rubric = document.createElement("ul");
+            assessment.rubric.forEach((criterion) => addText(
+                rubric,
+                "li",
+                `${criterion.criterion} (${criterion.weight_percent}%): ${criterion.description}`
+            ));
+            if (rubric.childElementCount) {
+                addText(assessmentWorkspace, "h2", "Evaluation criteria");
+                assessmentWorkspace.append(rubric);
+            }
+
+            assessment.attempts.forEach((attempt) => {
+                const status = attempt.status === "draft"
+                    ? "Draft in progress"
+                    : attempt.status === "awaiting_review"
+                        ? "Awaiting instructor review"
+                        : `${attempt.status}: ${attempt.marks_obtained ?? "—"}/${attempt.maximum_marks}`;
+                addText(assessmentWorkspace, "p",
+                    `Attempt ${attempt.attempt_number}: ${status}`);
+            });
+
+            if (assessment.attempts_remaining > 0) {
+                const start = document.createElement("button");
+                start.type = "button";
+                start.className = "assessment-action";
+                start.textContent = assessment.attempts.some((attempt) => attempt.status === "draft")
+                    ? "Continue saved attempt"
+                    : "Start assessment";
+                start.addEventListener("click", startAssessment);
+                assessmentWorkspace.append(start);
+            }
+        }
+
+        async function startAssessment() {
+            try {
+                const result = await assessmentRequest(assessmentApi("/attempts"), { method: "POST" });
+                currentAttemptId = result.attempt_id;
+                const refreshed = await assessmentRequest(assessmentApi());
+                currentAssessment = refreshed;
+                renderAttemptForm(refreshed);
+            } catch (error) {
+                assessmentMessage.textContent = error.message;
+            }
+        }
+
+        function renderAttemptForm(assessment) {
+            assessmentWorkspace.replaceChildren();
+            addText(assessmentWorkspace, "h2", "Your answers");
+            const form = document.createElement("form");
+            form.id = "attemptForm";
+
+            if (assessment.assessment_type === "mcq") {
+                assessment.questions.forEach((question) => {
+                    const fieldset = document.createElement("fieldset");
+                    fieldset.style.margin = "16px 0";
+                    addText(fieldset, "legend",
+                        `${question.position}. ${question.prompt} (${question.marks} marks)`);
+                    question.options.forEach((option, optionIndex) => {
+                        const label = document.createElement("label");
+                        label.style.display = "block";
+                        const input = document.createElement("input");
+                        input.type = "radio";
+                        input.name = `question-${question.position}`;
+                        input.value = String(optionIndex);
+                        const saved = assessment.attempts.find(
+                            (attempt) => attempt.id === currentAttemptId
+                        )?.answers?.[String(question.position)]?.selected_option;
+                        input.checked = saved === optionIndex;
+                        label.append(input, document.createTextNode(` ${option}`));
+                        fieldset.append(label);
+                    });
+                    form.append(fieldset);
+                });
+            } else {
+                addText(form, "label", "Submission notes (at least 20 characters):");
+                const answer = document.createElement("textarea");
+                answer.name = "answer_text";
+                answer.rows = 7;
+                answer.maxLength = 10000;
+                answer.style.display = "block";
+                answer.style.width = "100%";
+                answer.style.margin = "8px 0 16px";
+                const saved = assessment.attempts.find(
+                    (attempt) => attempt.id === currentAttemptId
+                )?.answers?.["1"];
+                answer.value = saved?.answer_text || "";
+                form.append(answer);
+
+                const uploadLabel = addText(form, "label", "Optional supporting file (PDF, ZIP, image, TXT or CSV; max 5 MB):");
+                const upload = document.createElement("input");
+                upload.type = "file";
+                upload.name = "file";
+                upload.accept = ".csv,.jpeg,.jpg,.pdf,.png,.txt,.zip";
+                upload.style.display = "block";
+                upload.style.margin = "8px 0 16px";
+                uploadLabel.append(upload);
+            }
+
+            const save = document.createElement("button");
+            save.type = "button";
+            save.className = "assessment-action";
+            save.textContent = "Save answers";
+            save.addEventListener("click", () => saveAttempt(form, false));
+            form.append(save);
+
+            const submit = document.createElement("button");
+            submit.type = "button";
+            submit.className = "assessment-action";
+            submit.style.marginLeft = "10px";
+            submit.textContent = "Submit assessment";
+            submit.addEventListener("click", () => {
+                if (window.confirm("Submit this assessment now? You cannot edit it afterward.")) {
+                    saveAttempt(form, true);
+                }
+            });
+            form.append(submit);
+            assessmentWorkspace.append(form);
+            assessmentMessage.textContent = "Your draft is saved on the server when you choose Save answers.";
+        }
+
+        async function saveAttempt(form, submitAfterSave) {
+            const path = `/attempts/${currentAttemptId}`;
+            try {
+                let answerPayload;
+                if (currentAssessment.assessment_type === "mcq") {
+                    const answers = {};
+                    currentAssessment.questions.forEach((question) => {
+                        const selected = form.querySelector(
+                            `[name="question-${question.position}"]:checked`
+                        );
+                        if (selected) answers[String(question.position)] = Number(selected.value);
+                    });
+                    answerPayload = { answers };
+                } else {
+                    answerPayload = { answer_text: form.elements.answer_text.value };
+                    const upload = form.elements.file.files[0];
+                    if (upload) {
+                        const fileData = new FormData();
+                        fileData.append("file", upload);
+                        await assessmentRequest(assessmentApi(`${path}/attachment`), {
+                            method: "POST",
+                            body: fileData
+                        });
+                    }
+                }
+
+                await assessmentRequest(assessmentApi(`${path}/answers`), {
+                    method: "PUT",
+                    body: JSON.stringify(answerPayload)
+                });
+                if (!submitAfterSave) {
+                    assessmentMessage.textContent = "Draft answers saved.";
+                    return;
+                }
+
+                const result = await assessmentRequest(assessmentApi(`${path}/submit`), {
+                    method: "POST",
+                    body: JSON.stringify({})
+                });
+                assessmentWorkspace.replaceChildren();
+                addText(assessmentWorkspace, "h2", "Assessment result");
+                addText(assessmentWorkspace, "p", result.message);
+                if (result.marks_obtained !== null) {
+                    addText(assessmentWorkspace, "p",
+                        `Result: ${result.marks_obtained}/${result.maximum_marks} (${result.percentage}%) — ${result.passed ? "Pass" : "Not passed"}`);
+                    result.feedback.forEach((item) => {
+                        addText(assessmentWorkspace, "h3", `Question ${item.position}: ${item.correct ? "Correct" : "Review this topic"}`);
+                        addText(assessmentWorkspace, "p", `Correct answer: ${item.correct_answer}. ${item.explanation}`);
+                    });
+                }
+                assessmentMessage.textContent = "Submission recorded.";
+            } catch (error) {
+                assessmentMessage.textContent = error.message;
+            }
+        }
+
+        async function loadAssessmentDetail() {
+            document.getElementById("pageTitle").textContent = "Assessment";
+            document.getElementById("backLink").href = "/assessments.html";
+            document.getElementById("backLink").textContent = "Back to Assessments";
+            assessmentList.hidden = true;
+            assessmentWorkspace.hidden = false;
+            try {
+                const assessment = await assessmentRequest(assessmentApi());
+                renderAssessmentDetails(assessment);
+            } catch {
+                assessmentMessage.textContent =
+                    "This assessment could not be loaded. Return to the assessment list or contact support.";
+            }
+        }
+
+        if (assessmentRoute.courseSlug && assessmentRoute.assessmentSlug) {
+            loadAssessmentDetail();
+        } else {
+            loadAssessments();
+        }
+    </script>
+</body>
+</html>

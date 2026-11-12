@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fees &amp; Payments | Student Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>Student Portal</h2>
+        <div class="platform-nav">
+            <a class="dashboard-btn" href="dashboard.html">Dashboard</a>
+            <a class="dashboard-btn" href="assessments.html">Assessments</a>
+            <a class="dashboard-btn" href="support.html">Help &amp; Support</a>
+        </div>
+    </nav>
+    <main class="container platform-page">
+        <section class="heading">
+            <h1>Fees &amp; Payments</h1>
+            <p>Review your balance, payment due date and verified payment history.</p>
+        </section>
+        <p class="demo-banner" role="note">DEMO — NO REAL MONEY IS CHARGED. Real payments are disabled because no payment gateway is configured.</p>
+        <p id="feeMessage" class="form-message" role="status" aria-live="polite"></p>
+        <section class="summary platform-summary" aria-label="Fee summary">
+            <div class="summary-card"><p>Total course fee</p><h2 data-total-fee>Loading…</h2></div>
+            <div class="summary-card"><p>Verified amount paid</p><h2 data-paid-fee>Loading…</h2></div>
+            <div class="summary-card"><p>Pending balance</p><h2 data-pending-fee>Loading…</h2></div>
+        </section>
+        <section class="platform-panel">
+            <h2>Payment due date</h2>
+            <p data-fee-due-date>Loading…</p>
+            <p data-fee-reminder></p>
+            <h3>Payment instructions</h3>
+            <ol>
+                <li>Confirm the pending balance and due date above.</li>
+                <li>Select a payment method shown as available. Only the clearly labelled demo option is configured here.</li>
+                <li>Choose <strong>Pay Now (Demo)</strong> to record a simulated outcome. No card, bank, or UPI details are collected.</li>
+                <li>Only a server-recorded successful demo result updates the paid balance and enables a receipt download.</li>
+            </ol>
+            <div class="platform-actions">
+                <label for="paymentMethod">Available payment method</label>
+                <select id="paymentMethod" disabled aria-describedby="paymentDisclaimer"></select>
+                <button id="payNow" class="pay-btn" type="button" disabled>Pay Now</button>
+            </div>
+            <p id="paymentDisclaimer" class="muted">Real payment methods remain unavailable until a gateway, server-side verification, and verified webhook are configured.</p>
+        </section>
+        <section class="platform-panel">
+            <h2>Payment history</h2>
+            <div class="table-wrap">
+                <table class="platform-table">
+                    <thead><tr><th>Date</th><th>Amount</th><th>Transaction reference</th><th>Status</th><th>Receipt</th></tr></thead>
+                    <tbody data-payment-history><tr><td colspan="5">Loading payment history…</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="platform-panel">
+            <h2>Payment troubleshooting</h2>
+            <details><summary>Payment failed</summary><p>No amount is counted as paid unless the server records verified success. Check the history before retrying; if it still fails, report a payment issue.</p></details>
+            <details><summary>Amount deducted but status is pending</summary><p>This site does not process real payments. For a real provider, keep the provider reference and contact the administrator; do not retry until the payment is reconciled. A pending demo entry is not a bank charge.</p></details>
+            <details><summary>Payment successful but receipt is unavailable</summary><p>Refresh this page and check the recorded status. Receipts are available only for successful records. If the record is successful and the receipt is still missing, report the issue.</p></details>
+            <details><summary>Duplicate payment attempt</summary><p>Repeated requests with the same request key are idempotent. Check your history before trying again. Do not assume a bank reversal or refund unless it has been confirmed.</p></details>
+            <details><summary>Payment deadline passed</summary><p>Contact the administrator using Help &amp; Support to confirm the due date and next steps. No late fee is charged by this demo.</p></details>
+            <details><summary>How do I contact the administrator?</summary><p>Submit a support request with category “Payment issue” and include the date and transaction reference. Never include a PIN, password, CVV or full card number.</p></details>
+            <a class="course-btn" href="support.html">Report a payment problem</a>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CSS &amp; Responsive Design</title>
+
+    
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 Student Portal
+        </div>
+
+        <a class="dashboard-btn" href="dashboard.html">
+            Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="title" id="css-responsive-design">
+
+            <h1>CSS &amp; Responsive Design</h1>
+
+            <p>
+                Style webpages and adapt layouts to different screen sizes.
+            </p>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>What is CSS?</h2>
+
+            <p>
+                CSS stands for Cascading Style Sheets. It controls how HTML
+                content looks, including colors, spacing, typography and layout.
+            </p>
+
+            <p>
+                Flexbox and Grid help arrange content, while media queries let
+                a layout respond to the available screen width.
+            </p>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>What you will learn</h2>
+
+            <ul class="topic-list">
+
+                <li>CSS selectors and declarations</li>
+
+                <li>Colors, spacing and typography</li>
+
+                <li>Flexible layouts with Flexbox and Grid</li>
+
+                <li>Responsive breakpoints with media queries</li>
+
+                <li>Mobile-first design principles</li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>A Responsive CSS Rule</h2>
+
+            <p>
+                Use a media query to switch to a single-column layout on narrow screens:
+            </p>
+
+            <div class="code-box">
+                <pre><code>.lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 700px) {
+    .lesson-grid {
+        grid-template-columns: 1fr;
+    }
+}</code></pre>
+            </div>
+
+                <button class="complete-btn" data-lesson-complete="CSS &amp; Responsive Design" onclick="completeLesson('CSS & Responsive Design')">
+
+                ✓ Mark Lesson Complete
+
+            </button>
+
+            <p class="lesson-message" aria-live="polite"></p>
+
+        </div>
+
+        <section class="lesson-card" id="javascript-basics">
+            <h2>JavaScript Basics</h2>
+            <p>JavaScript adds behavior to a webpage. Start with values, variables, functions, and event listeners.</p>
+            <div class="code-box">
+                <pre><code>const button = document.querySelector("button");
+
+button.addEventListener("click", function () {
+    alert("Button clicked!");
+});</code></pre>
+            </div>
+            <button class="complete-btn" data-lesson-complete="JavaScript Basics" onclick="completeLesson('JavaScript Basics')">
+                Mark Lesson Complete
+            </button>
+            <p class="lesson-message" aria-live="polite"></p>
+        </section>
+
+        <section class="lesson-card" id="modern-website-development">
+            <h2>Modern Website Development</h2>
+            <p>Bring structure, presentation, and behavior together to build a responsive, accessible website.</p>
+            <ul class="topic-list">
+                <li>Organize content with semantic HTML</li>
+                <li>Style reusable layouts with CSS</li>
+                <li>Add interactions with JavaScript</li>
+                <li>Test navigation and layouts on small screens</li>
+            </ul>
+            <button class="complete-btn" data-lesson-complete="Modern Website Development" onclick="completeLesson('Modern Website Development')">
+                Mark Lesson Complete
+            </button>
+            <p class="lesson-message" aria-live="polite"></p>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

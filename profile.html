@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Profile | Student Portal</title>
+
+    
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            Student Portal
+        </div>
+
+        <a href="dashboard.html" class="dashboard-btn">
+            Dashboard
+        </a>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <h1 class="page-title">
+            My Profile 👤
+        </h1>
+
+        <p class="subtitle">
+            View and manage your student information.
+        </p>
+
+
+        <!-- Profile Card -->
+        <section class="profile-card">
+
+            <div class="profile-header">
+
+                <div class="avatar">
+                    S
+                </div>
+
+                <div>
+                    <h2 class="student-name">
+                        Student
+                    </h2>
+
+                    <p class="student-role">
+                        Student • Full Stack Development
+                    </p>
+                </div>
+
+            </div>
+
+
+            <h3 class="details-title">
+                Personal Information
+            </h3>
+
+
+            <div class="details-grid">
+
+                <div class="detail-box">
+                    <label class="detail-label" for="profileName">
+                        Full Name
+                    </label>
+
+                    <p class="detail-value" data-profile-value="name">
+                        Student
+                    </p>
+                    <input id="profileName" data-profile-input="name" type="text" value="Student" required hidden>
+                </div>
+
+
+                <div class="detail-box">
+                    <label class="detail-label" for="profileEmail">
+                        Email Address
+                    </label>
+
+                    <p class="detail-value" data-profile-value="email">
+                        student@example.com
+                    </p>
+                    <input id="profileEmail" data-profile-input="email" type="email" value="student@example.com" required hidden>
+                </div>
+
+
+                <div class="detail-box">
+                    <label class="detail-label" for="profileId">
+                        Student ID
+                    </label>
+
+                    <p class="detail-value" data-profile-value="studentId">
+                        STU2026001
+                    </p>
+                    <input id="profileId" data-profile-input="studentId" type="text" value="STU2026001" required hidden>
+                </div>
+
+
+                <div class="detail-box">
+                    <label class="detail-label" for="profileCourse">
+                        Course
+                    </label>
+
+                    <p class="detail-value" data-profile-value="course">
+                        Full Stack Development
+                    </p>
+                    <input id="profileCourse" data-profile-input="course" type="text" value="Full Stack Development" required hidden>
+                </div>
+
+
+                <div class="detail-box">
+                    <label class="detail-label" for="profileYear">
+                        Academic Year
+                    </label>
+
+                    <p class="detail-value" data-profile-value="year">
+                        2026
+                    </p>
+                    <input id="profileYear" data-profile-input="year" type="text" value="2026" required hidden>
+                </div>
+
+
+                <div class="detail-box">
+                    <p class="detail-label">
+                        Account Status
+                    </p>
+
+                    <p class="detail-value">
+                        Active
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button class="edit-btn" onclick="editProfile()">
+                    Edit Profile
+                </button>
+
+                <div class="edit-actions" hidden>
+                    <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+                    <button class="cancel-btn" onclick="cancelProfileEdit()">Cancel</button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help &amp; Support | Student Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>Student Portal</h2>
+        <div class="platform-nav">
+            <a class="dashboard-btn" href="dashboard.html">Dashboard</a>
+            <a class="dashboard-btn" href="fees.html">Fees</a>
+            <a class="dashboard-btn" href="assessments.html">Assessments</a>
+        </div>
+    </nav>
+    <main class="container platform-page">
+        <section class="heading">
+            <h1>Help &amp; Support</h1>
+            <p>Report an issue and track its status in this browser session.</p>
+        </section>
+        <section class="platform-panel">
+            <h2>Common recovery steps</h2>
+            <ul>
+                <li><strong>Course access:</strong> reload the course page; if the issue continues, include the course name and page URL in your report.</li>
+                <li><strong>Broken lesson or video:</strong> try the official documentation link and report the broken URL.</li>
+                <li><strong>Project submission:</strong> check file type and the 5 MB limit, then retry once.</li>
+                <li><strong>Payment:</strong> check payment history before retrying. Never send card, PIN, CVV or banking passwords.</li>
+                <li><strong>Assessment:</strong> drafts are saved as answers are selected; reload the same assessment to resume.</li>
+            </ul>
+        </section>
+        <section class="platform-panel">
+            <h2>Submit a support request</h2>
+            <form data-support-form>
+                <label for="supportCategory">Category</label>
+                <select id="supportCategory" name="category" required>
+                    <option value="course_access">Course access problem</option>
+                    <option value="lesson_link">Broken lesson or video link</option>
+                    <option value="project_submission">Project submission problem</option>
+                    <option value="payment">Payment issue</option>
+                    <option value="assessment">Assessment issue</option>
+                    <option value="other">Other</option>
+                </select>
+                <label for="supportDescription">Description (10–3,000 characters)</label>
+                <textarea id="supportDescription" name="description" rows="5" minlength="10" maxlength="3000" required></textarea>
+                <button class="course-btn" type="submit">Submit support request</button>
+                <p data-support-message class="form-message" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+        <section class="platform-panel">
+            <h2>Your support requests</h2>
+            <div class="table-wrap">
+                <table class="platform-table">
+                    <thead><tr><th>Ticket</th><th>Category</th><th>Submitted</th><th>Status</th><th>Description</th></tr></thead>
+                    <tbody data-support-history><tr><td colspan="5">Loading requests…</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

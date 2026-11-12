@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Assignments</title>
+
+    
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <h2>Student Portal</h2>
+
+        <a class="dashboard-btn" href="dashboard.html">
+            Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <section class="heading">
+
+            <h1>Assignments 📝</h1>
+
+            <p>
+                Track your assignments and submission status.
+            </p>
+
+        </section>
+
+
+        <div class="assignment">
+
+            <div class="assignment-info">
+
+                <h3>HTML & CSS Project</h3>
+
+                <p>
+                    Due: August 18, 2026
+                </p>
+
+            </div>
+
+            <div>
+
+                <span class="status pending">
+                    Pending
+                </span>
+
+                <button
+                    class="submit-btn"
+                    data-assignment="HTML &amp; CSS Project"
+                    onclick="submitAssignment('HTML & CSS Project')">
+                    Submit
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="assignment">
+
+            <div class="assignment-info">
+
+                <h3>UI/UX Case Study</h3>
+
+                <p>
+                    Due: August 20, 2026
+                </p>
+
+            </div>
+
+            <div>
+
+                <span class="status pending">
+                    Pending
+                </span>
+
+                <button
+                    class="submit-btn"
+                    data-assignment="UI/UX Case Study"
+                    onclick="submitAssignment('UI/UX Case Study')">
+                    Submit
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="assignment">
+
+            <div class="assignment-info">
+
+                <h3>JavaScript Mini Project</h3>
+
+                <p>
+                    Due: August 25, 2026
+                </p>
+
+            </div>
+
+            <div>
+
+                <span class="status completed">
+                    Completed
+                </span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

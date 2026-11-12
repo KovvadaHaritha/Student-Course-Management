@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🎓 Student Portal</div>
+        <a class="dashboard-btn" href="dashboard.html">Dashboard</a>
+    </nav>
+
+    <main class="container">
+        <div class="title">
+            <h1>🐍 Python Programming</h1>
+            <p>Learn Python fundamentals and build problem-solving skills.</p>
+        </div>
+
+        <section class="lesson-card">
+            <h2>Variables and Data</h2>
+            <p>
+                Variables give names to values. Python infers a value's type,
+                so you can work with text, numbers, and Boolean values directly.
+            </p>
+            <div class="code-box">
+                <pre><code>name = "Asha"
+lessons_finished = 3
+is_enrolled = True
+
+print(f"{name} has finished {lessons_finished} lessons.")</code></pre>
+            </div>
+        </section>
+
+        <section class="lesson-card">
+            <h2>Conditions and Functions</h2>
+            <p>
+                Use conditions to choose what a program does, and functions to
+                package useful steps so they can be called again.
+            </p>
+            <div class="code-box">
+                <pre><code>def lesson_status(completed, total):
+    if completed == total:
+        return "Course complete"
+    return f"{completed} of {total} lessons complete"
+
+print(lesson_status(3, 5))</code></pre>
+            </div>
+            <ul class="topic-list">
+                <li>Write and call functions with parameters</li>
+                <li>Use if/else to handle different cases</li>
+                <li>Return a result from a function</li>
+            </ul>
+            <button class="complete-btn"
+                    data-lesson-complete="Python Programming"
+                    onclick="completeLesson('Python Programming')">
+                ✓ Mark Lesson Complete
+            </button>
+            <p class="lesson-message" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

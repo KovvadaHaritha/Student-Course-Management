@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HTML Fundamentals</title>
+    
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 Student Portal
+        </div>
+
+        <a class="dashboard-btn" href="dashboard.html">
+            Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="title">
+
+            <h1>📘 HTML Fundamentals</h1>
+
+            <p>
+                Learn the basics of HTML and how webpages are structured.
+            </p>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>What is HTML?</h2>
+
+            <p>
+                HTML stands for HyperText Markup Language.
+                It is used to create the structure of webpages.
+            </p>
+
+            <p>
+                HTML uses elements and tags to define headings,
+                paragraphs, links, images and other content.
+            </p>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>What You Will Learn</h2>
+
+            <ul class="topic-list">
+
+                <li>HTML document structure</li>
+
+                <li>Headings and paragraphs</li>
+
+                <li>Links and images</li>
+
+                <li>Lists and forms</li>
+
+                <li>Basic webpage structure</li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="lesson-card">
+
+            <h2>💻 Your First HTML Page</h2>
+
+            <p>
+                A basic HTML page looks like this:
+            </p>
+
+            <div class="code-box">
+
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;Welcome to HTML!&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</pre>
+
+            </div>
+
+            <button class="complete-btn"
+                    data-lesson-complete="HTML Fundamentals"
+                    onclick="completeLesson('HTML Fundamentals')">
+
+                ✓ Mark Lesson Complete
+
+            </button>
+
+            <p id="lessonMessage" class="lesson-message" aria-live="polite"></p>
+
+        </div>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

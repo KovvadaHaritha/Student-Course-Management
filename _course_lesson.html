@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lesson.title }} | {{ course.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('serve_public_file', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🎓 Student Portal</div>
+        <div class="course-nav-actions">
+            <a class="dashboard-btn" href="{{ url_for('course_overview', course_slug=course_slug, learner_id=learner_id) }}"
+               data-course-link data-course-slug="{{ course_slug }}">Course overview</a>
+            <a class="dashboard-btn" href="{{ url_for('serve_public_file', filename='dashboard.html') }}">Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="container course-shell course-lesson-shell" data-course-slug="{{ course_slug }}"
+          data-lesson-slug="{{ lesson.slug }}">
+        <p class="course-error" data-course-error hidden></p>
+        <div class="lesson-page-heading">
+            <p class="eyebrow">{{ course.title }} · Module {{ "%02d"|format(lesson.module_index) }}</p>
+            <h1>{{ lesson.title }}</h1>
+            <p>{{ lesson.module_title }}</p>
+            <div class="progress-info">
+                <span>Course progress</span>
+                <strong data-course-progress-text>{{ progress.completed_count }} / {{ progress.total }} lessons · {{ progress.percent }}%</strong>
+            </div>
+            <div class="progress-bar" role="progressbar" aria-label="Course progress"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress.percent }}"
+                 data-course-progress-bar>
+                <div class="progress-fill" style="width: {{ progress.percent }}%"></div>
+            </div>
+        </div>
+
+        <div class="lesson-learning-layout">
+            <article class="lesson-content">
+                <section class="learning-panel">
+                    <h2>Learning objectives</h2>
+                    <ul class="topic-list">
+                        {% for objective in lesson.objectives %}
+                        <li>{{ objective }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <section class="learning-panel">
+                    <h2>Learn the idea</h2>
+                    <p>{{ lesson.explanation }}</p>
+                    <ol class="teaching-steps">
+                        {% for step in lesson.steps %}
+                        <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </section>
+
+                <section class="learning-panel">
+                    <h2>Real-world example</h2>
+                    <p>{{ lesson.real_world }}</p>
+                    <h3>Practical example</h3>
+                    <div class="code-box"><pre><code>{{ lesson.example }}</code></pre></div>
+                </section>
+
+                <section class="learning-panel">
+                    <h2>Practice</h2>
+                    <p>{{ lesson.exercise }}</p>
+                </section>
+
+                <section class="learning-panel">
+                    <h2>Short quiz</h2>
+                    <p>Choose the best answer and review the explanation.</p>
+                    <form class="lesson-quiz-form" data-quiz-form
+                          data-course-slug="{{ course_slug }}" data-lesson-slug="{{ lesson.slug }}">
+                        {% for question in lesson.quiz %}
+                        <fieldset class="quiz-question">
+                            <legend>{{ loop.index }}. {{ question.question }}</legend>
+                            {% set question_index = loop.index0 %}
+                            {% for option in question.options %}
+                            <label class="choice-label">
+                                <input type="radio" name="question-{{ question_index }}" value="{{ loop.index0 }}" required>
+                                <span>{{ option }}</span>
+                            </label>
+                            {% endfor %}
+                        </fieldset>
+                        {% endfor %}
+                        <button class="lesson-btn" type="submit">Check answers</button>
+                        <p class="quiz-result" aria-live="polite" data-quiz-result></p>
+                        <div class="quiz-feedback" data-quiz-feedback></div>
+                    </form>
+                </section>
+
+                <section class="learning-panel lesson-finish-panel">
+                    <div class="lesson-completion-copy">
+                        <h2>Finish this lesson</h2>
+                        <p>Mark this lesson complete when you have worked through the explanation and practice.</p>
+                    </div>
+                    <button class="complete-btn" type="button" data-complete-lesson
+                            data-course-slug="{{ course_slug }}" data-lesson-slug="{{ lesson.slug }}"
+                            {% if lesson.slug in progress.completed %}disabled{% endif %}>
+                        {% if lesson.slug in progress.completed %}Lesson Complete{% else %}✓ Mark Lesson Complete{% endif %}
+                    </button>
+                    <p class="lesson-message" aria-live="polite" data-completion-message></p>
+                    <a class="course-complete-label" href="{{ url_for('course_overview', course_slug=course_slug, learner_id=learner_id) }}"
+                       data-course-complete-link data-course-link data-course-slug="{{ course_slug }}"
+                       {% if not progress.is_complete %}hidden{% endif %}>
+                        All lessons complete — open your course resources
+                    </a>
+                </section>
+
+                <nav class="lesson-pager" aria-label="Lesson navigation">
+                    {% if previous_lesson %}
+                    <a class="lesson-pager-link" href="{{ url_for('course_lesson', course_slug=course_slug, lesson_slug=previous_lesson.slug, learner_id=learner_id) }}"
+                       data-course-link data-course-slug="{{ course_slug }}">← Previous lesson<span>{{ previous_lesson.title }}</span></a>
+                    {% else %}
+                    <span class="lesson-pager-link is-disabled" aria-disabled="true">← Previous lesson<span>You are at the first lesson.</span></span>
+                    {% endif %}
+                    {% if next_lesson %}
+                    <a class="lesson-pager-link next" href="{{ url_for('course_lesson', course_slug=course_slug, lesson_slug=next_lesson.slug, learner_id=learner_id) }}"
+                       data-course-link data-course-slug="{{ course_slug }}">Next lesson →<span>{{ next_lesson.title }}</span></a>
+                    {% else %}
+                    <span class="lesson-pager-link next is-disabled" aria-disabled="true">Next lesson →<span>You have reached the last lesson.</span></span>
+                    {% endif %}
+                </nav>
+                {% if not next_lesson %}
+                <a class="course-assessment-link" href="{{ url_for('course_overview', course_slug=course_slug, learner_id=learner_id) }}"
+                   data-course-link data-course-slug="{{ course_slug }}">Open course assessment and capstone →</a>
+                {% endif %}
+            </article>
+
+            <aside class="learning-panel lesson-sidebar">
+                <a class="sidebar-course-link" href="{{ url_for('course_overview', course_slug=course_slug, learner_id=learner_id) }}"
+                   data-course-link data-course-slug="{{ course_slug }}">← {{ course.title }} overview</a>
+                {% for module in modules %}
+                <details class="sidebar-module" {% if module.title == lesson.module_title %}open{% endif %}>
+                    <summary>Module {{ "%02d"|format(loop.index) }} · {{ module.title }}</summary>
+                    <ol class="sidebar-lessons">
+                        {% for item in module.lessons %}
+                        <li>
+                            <a class="{% if item.slug == lesson.slug %}is-current{% endif %} {% if item.slug in progress.completed %}is-complete{% endif %}"
+                               href="{{ url_for('course_lesson', course_slug=course_slug, lesson_slug=item.slug, learner_id=learner_id) }}"
+                               data-course-link data-course-slug="{{ course_slug }}" data-lesson-slug="{{ item.slug }}">
+                                <span class="lesson-status" aria-hidden="true"></span>{{ item.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </details>
+                {% endfor %}
+            </aside>
+        </div>
+    </main>
+    <script src="{{ url_for('serve_public_file', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Courses</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <h2>Student Portal</h2>
+
+    <a href="dashboard.html" class="nav-btn">
+        Dashboard
+    </a>
+</header>
+
+
+<main class="container">
+    <h1>My Courses 📚</h1>
+    <p class="page-subtitle">
+        Continue learning and track your progress.
+    </p>
+    <p class="course-error" data-course-error hidden></p>
+
+    <section class="course-grid">
+        {% for course in course_cards %}
+        <article class="course-box">
+            <div class="course-icon" aria-hidden="true">{{ course.icon }}</div>
+            <h2>{{ course.title }}</h2>
+            <p>{{ course.description }}</p>
+            {% if course.difficulty %}
+            <p class="course-meta">{{ course.difficulty }} · {{ course.duration }}</p>
+            {% endif %}
+            <div class="progress-info">
+                <span>Progress</span>
+                <strong data-card-progress="{{ course.slug }}">{{ course.progress.percent }}%</strong>
+            </div>
+            <div class="progress-bar" role="progressbar"
+                 aria-label="{{ course.title }} progress"
+                 aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="{{ course.progress.percent }}">
+                <div class="progress-fill" style="width: {{ course.progress.percent }}%"></div>
+            </div>
+            {% if course.progress.is_complete %}
+            <p class="course-complete-label">Course complete</p>
+            {% endif %}
+            <a href="{{ course.url }}" class="course-btn"
+               data-course-link data-course-slug="{{ course.slug }}">
+                Continue Learning
+            </a>
+        </article>
+        {% endfor %}
+    </section>
+</main>
+
+    <script src="script.js"></script>
+</body>
+</html>

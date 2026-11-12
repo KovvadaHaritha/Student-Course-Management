@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Design</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🎓 Student Portal</div>
+        <a class="dashboard-btn" href="dashboard.html">Dashboard</a>
+    </nav>
+
+    <main class="container">
+        <div class="title">
+            <h1>🎨 UI/UX Design</h1>
+            <p>Practice designing clear, accessible, user-friendly experiences.</p>
+        </div>
+
+        <section class="lesson-card">
+            <h2>Start with the User</h2>
+            <p>
+                User experience (UX) design begins by understanding who needs
+                the product and what they are trying to accomplish. A short
+                interview or task observation can reveal needs that assumptions
+                may miss.
+            </p>
+            <ul class="topic-list">
+                <li>Describe the audience and their goals</li>
+                <li>Map the steps a user takes to finish a task</li>
+                <li>Identify confusing or unnecessary steps</li>
+            </ul>
+        </section>
+
+        <section class="lesson-card">
+            <h2>From Wireframe to Interface</h2>
+            <p>
+                A wireframe is a simple layout plan. Arrange content by
+                importance first, then apply typography, color, and spacing to
+                establish a consistent visual hierarchy.
+            </p>
+            <ul class="topic-list">
+                <li>Keep primary actions easy to find</li>
+                <li>Use consistent spacing and clear labels</li>
+                <li>Check color contrast and keyboard accessibility</li>
+                <li>Test a prototype with users and refine it</li>
+            </ul>
+            <button class="complete-btn"
+                    data-lesson-complete="UI/UX Design"
+                    onclick="completeLesson('UI/UX Design')">
+                ✓ Mark Lesson Complete
+            </button>
+            <p class="lesson-message" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

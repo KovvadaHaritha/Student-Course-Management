@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Course Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <div class="login-container">
+
+        <div class="logo">🎓</div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Login to continue to your student portal
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <p class="demo-note">Demo sign-in uses your email only. No password is requested or stored.</p>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <button type="button" class="forgot" onclick="showPasswordHelp()">
+            Forgot Password?
+        </button>
+        <p id="loginMessage" class="form-message" aria-live="polite"></p>
+
+        <p class="signup-text">
+            Don't have an account?
+            <a href="signup.html">Sign Up</a>
+        </p>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

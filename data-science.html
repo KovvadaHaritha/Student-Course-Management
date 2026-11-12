@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Science</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🎓 Student Portal</div>
+        <a class="dashboard-btn" href="dashboard.html">Dashboard</a>
+    </nav>
+
+    <main class="container">
+        <div class="title">
+            <h1>📊 Data Science</h1>
+            <p>Explore data analysis, visualization, and machine learning basics.</p>
+        </div>
+
+        <section class="lesson-card">
+            <h2>Ask a Question of Your Data</h2>
+            <p>
+                Data analysis starts with a clear question. Collect relevant
+                observations, check for missing or inconsistent values, and
+                summarize what the data contains before drawing conclusions.
+            </p>
+            <ul class="topic-list">
+                <li>Define the question and the measurements you need</li>
+                <li>Clean and organize the collected data</li>
+                <li>Summarize patterns with counts and averages</li>
+            </ul>
+        </section>
+
+        <section class="lesson-card">
+            <h2>Summarize and Visualize</h2>
+            <p>
+                A small table can be enough to practice grouping measurements
+                and comparing results. Charts make trends easier to spot, but
+                always label them clearly and keep the original context in mind.
+            </p>
+            <div class="code-box">
+                <pre><code>study_hours = [1, 2, 2, 3, 4]
+average_hours = sum(study_hours) / len(study_hours)
+
+print(f"Average study hours: {average_hours:.1f}")</code></pre>
+            </div>
+            <ul class="topic-list">
+                <li>Choose a chart that fits the question</li>
+                <li>Look for patterns without confusing correlation with cause</li>
+                <li>Use a train/test split when evaluating a basic model</li>
+            </ul>
+            <button class="complete-btn"
+                    data-lesson-complete="Data Science"
+                    onclick="completeLesson('Data Science')">
+                ✓ Mark Lesson Complete
+            </button>
+            <p class="lesson-message" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
