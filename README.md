@@ -55,7 +55,7 @@ Create a Python web service and set:
 - **Build command:** `pip install -r requirements.txt`
 - **Start command:** `flask --app app init-db && gunicorn --bind 0.0.0.0:$PORT app:app`
 
-The explicit initialization command is needed because Gunicorn imports `app:app` and does not execute the `if __name__ == "__main__"` block. `init-db` creates missing tables and seeds missing course/assessment rows using the existing idempotent schema. It does not delete the database or perform schema migrations. Back up existing data before deployment and before any future schema changes.
+The explicit initialization command creates missing tables and seeds missing course/assessment rows before Gunicorn starts. Gunicorn also initializes the schema idempotently on its first request, so startup does not depend on Render Shell access or on executing the `if __name__ == "__main__"` block. `init-db` and the request-time initialization both use `CREATE TABLE IF NOT EXISTS`; they do not delete or recreate existing tables. Back up existing data before deployment and before any future schema changes.
 
 Configure these Render environment variables:
 
@@ -69,7 +69,7 @@ Configure these Render environment variables:
 
 Generate a secret locally with `python -c "import secrets; print(secrets.token_urlsafe(48))"` and enter the output directly in Render's environment settings. Do not put the generated value in source control or this README.
 
-The default SQLite file is `instance/student-course.sqlite3`; Render's ordinary service filesystem is not a durable database location. If keeping SQLite for a demo, attach persistent storage mounted at `/var/data`, set the database path above, use one web-service instance, and arrange regular off-service backups with restore checks. A persistent disk is still a single-instance SQLite setup, not a suitable multi-instance production database. Managed PostgreSQL is recommended for real accounts, payments, and enrollments; migrating the existing SQLite database requires a separate, backed-up migration plan.
+The default SQLite file is `instance/student-course.sqlite3`; Render Free's ordinary service filesystem is ephemeral and cannot guarantee that records survive instance replacement or redeploy. Schema initialization preserves existing rows in the database file it opens, but it cannot make an ephemeral file durable. To preserve records across those events, use persistent storage or a managed database and configure `STUDENT_COURSE_DB` accordingly. If keeping SQLite for a demo, use one web-service instance and arrange regular off-service backups with restore checks. A persistent disk is still a single-instance SQLite setup, not a suitable multi-instance production database. Managed PostgreSQL is recommended for real accounts, payments, and enrollments; migrating the existing SQLite database requires a separate, backed-up migration plan.
 
 The app requires `STUDENT_COURSE_SECRET_KEY` when `STUDENT_COURSE_ENV=production`, forces secure session cookies in production, and disables Flask debug mode in production. For local development, the secret-file fallback remains available; debug mode can be explicitly enabled with `FLASK_DEBUG=1`.
 
