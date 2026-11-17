@@ -10,6 +10,7 @@ from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 import secrets
 import sqlite3
+from threading import Lock
 import uuid
 from contextlib import closing
 from pathlib import Path
@@ -173,6 +174,23 @@ def initialize_database():
         connection.commit()
 
 
+_database_initialization_lock = Lock()
+_database_initialized = False
+
+
+def initialize_database_once():
+    global _database_initialized
+    with _database_initialization_lock:
+        if not _database_initialized:
+            initialize_database()
+            _database_initialized = True
+
+
+@app.before_request
+def ensure_database_initialized():
+    initialize_database_once()
+
+
 def get_course(course_slug):
     course = COURSES.get(course_slug)
     if course is None:
@@ -264,7 +282,7 @@ def latest_assessment(course_slug, learner_id):
 @app.cli.command("init-db")
 def init_db_command():
     """Create the database tables and seed the existing courses and lessons."""
-    initialize_database()
+    initialize_database_once()
     print(f"Database initialized at {DATABASE_PATH}")
 
 
@@ -1361,7 +1379,7 @@ def list_courses():
 
 
 if __name__ == "__main__":
-    initialize_database()
+    initialize_database_once()
     debug_enabled = (
         not IS_PRODUCTION
         and os.environ.get("FLASK_DEBUG", "").strip().lower() in {"1", "true", "yes"}
